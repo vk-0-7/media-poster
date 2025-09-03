@@ -78,7 +78,7 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
       setLoading(true)
       setError(null)
 
-      const response = await fetch("http://localhost:8080/api/posts")
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}posts`)
       const result = await response.json()
       console.log("result", result)
 
