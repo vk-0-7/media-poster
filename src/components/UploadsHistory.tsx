@@ -78,16 +78,15 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
       setLoading(true)
       setError(null)
 
-      const response = await fetch(
-        "/api/posts?limit=50&sortBy=uploadedAt&order=desc"
-      )
+      const response = await fetch("http://localhost:8080/api/posts")
       const result = await response.json()
+      console.log("result", result)
 
       if (!response.ok) {
         throw new Error(result.error || "Failed to fetch posts")
       }
 
-      const fetchedPosts = result.posts || []
+      const fetchedPosts = result || []
       setPosts(fetchedPosts)
 
       // Calculate statistics

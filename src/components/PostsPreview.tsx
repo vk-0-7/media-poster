@@ -90,33 +90,35 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
     .sort((a, b) => getViewCount(b) - getViewCount(a))
     .slice(0, posts.length / 2) // Show top 20 posts
 
-  useEffect(() => {
-    // Send sorted posts data to backend
-    const sendPostsToBackend = async () => {
-      try {
-        const response = await fetch("/api/posts/updateOnCloudinary", {
+  const uploadPostsToBackend = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}posts/uploadJSON`,
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            posts: sortedPosts,
-          }),
-        })
-
-        if (!response.ok) {
-          throw new Error("Failed to send posts to backend")
+          body: JSON.stringify({ data: sortedPosts }),
         }
+      )
 
-        const result = await response.json()
-        console.log("Posts successfully sent to backend:", result)
-      } catch (error) {
-        console.error("Error sending posts to backend:", error)
+      if (!response.ok) {
+        throw new Error("Failed to upload posts to backend")
       }
-    }
 
-    sendPostsToBackend()
-  }, [sortedPosts])
+      const result = await response.json()
+      console.log("Posts successfully uploaded to backend:", result)
+    } catch (error) {
+      console.error("Error uploading posts to backend:", error)
+    }
+  }
+
+  useEffect(() => {
+    if (sortedPosts.length > 0) {
+      uploadPostsToBackend()
+    }
+  }, [])
 
   if (sortedPosts.length === 0) {
     return (

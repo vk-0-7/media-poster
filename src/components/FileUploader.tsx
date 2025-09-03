@@ -60,83 +60,24 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
     const jsonFile = files.find(
       (file) => file.type === "application/json" || file.name.endsWith(".json")
     )
-
-    if (jsonFile) {
-      processFile(jsonFile)
-    }
   }, [])
 
   const handleFileSelect = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0]
       if (file) {
-        processFile(file)
+        setIsUploading(true)
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          const data = JSON.parse(e.target?.result as string)
+          onFileUpload(data)
+        }
+        reader.readAsText(file)
       }
     },
     []
   )
 
-  const processFile = async (file: File) => {
-    setIsUploading(true)
-    try {
-      const text = await file.text()
-      const data = JSON.parse(text)
-
-      // Validate that this is Instagram data
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error("Invalid Instagram data format")
-      }
-
-      const firstPost = data[0]
-      if (!firstPost.id || !firstPost.ownerUsername) {
-        throw new Error("Invalid Instagram post data structure")
-      }
-
-      // Upload data to MongoDB via API
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to upload data")
-      }
-
-      // Show success message with upload statistics
-      const successMessage = `🎉 Upload Successful!
-
-📊 Total Posts: ${result.results.totalPosts}
-✅ New Posts Added: ${result.results.inserted}
-🔄 Posts Updated: ${result.results.updated}
-${
-  result.results.errors > 0
-    ? `❌ Errors: ${result.results.errors}`
-    : "✅ No Errors"
-}
-
-🗄️ All data has been saved to MongoDB!`
-
-      alert(successMessage)
-      console.log("Upload Results:", result)
-
-      // Pass the data to the dashboard
-      onFileUpload(data as InstagramPost[])
-    } catch (error) {
-      console.error("Error processing file:", error)
-      alert(
-        `Error: ${
-          error instanceof Error ? error.message : "Unknown error occurred"
-        }`
-      )
-    } finally {
-      setIsUploading(false)
-    }
-  }
 
   return (
     <div className="flex-1 flex items-center justify-center p-12">
