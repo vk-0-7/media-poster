@@ -88,7 +88,7 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
   )
 
   return (
-    <div className="flex-1 flex items-center justify-center p-12">
+    <div className="flex-1 flex items-center justify-center p-4 sm:p-12">
       <div className="w-full max-w-4xl">
         {/* Account Tabs */}
         <div className="w-full mb-6 flex justify-center">
@@ -138,11 +138,11 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
           </div>
         </div>
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
             Welcome to <span className="gradient-text">InstaPoster</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Upload your Instagram data and let us help you create the perfect
             posting schedule
           </p>
@@ -150,7 +150,7 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
 
         {/* Upload Area */}
         <div
-          className={`w-full border-3 border-dashed rounded-3xl p-16 text-center transition-all duration-300 hover:shadow-xl ${
+          className={`w-full border-3 border-dashed rounded-3xl p-6 sm:p-16 text-center transition-all duration-300 hover:shadow-xl ${
             isDragOver
               ? "border-purple-400 bg-gradient-to-br from-purple-50 to-pink-50 shadow-2xl"
               : "border-gray-300 hover:border-purple-300 hover:bg-gray-50 shadow-large"
@@ -161,19 +161,19 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
         >
           {isUploading ? (
             <div className="space-y-8">
-              <div className="w-24 h-24 mx-auto border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin shadow-large"></div>
+              <div className="w-16 h-16 sm:w-24 sm:h-24 mx-auto border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin shadow-large"></div>
               <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-gray-900">
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">
                   Processing your Instagram data...
                 </h3>
-                <p className="text-gray-600 text-lg max-w-md mx-auto">
+                <p className="text-gray-600 text-base sm:text-lg max-w-md mx-auto">
                   Please wait while we analyze your Instagram posts and prepare
                   your dashboard
                 </p>
               </div>
 
               {/* Progress bar */}
-              <div className="w-64 mx-auto">
+              <div className="w-48 sm:w-64 mx-auto">
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full animate-pulse"></div>
                 </div>
@@ -182,17 +182,17 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
           ) : (
             <div className="space-y-10">
               {/* Icon */}
-              <div className="w-28 h-28 mx-auto bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl flex items-center justify-center shadow-large">
-                <span className="text-5xl">📁</span>
+              <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl flex items-center justify-center shadow-large">
+                <span className="text-4xl sm:text-5xl">📁</span>
               </div>
 
               {/* Content */}
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
                     Upload Instagram Data
                   </h3>
-                  <p className="text-xl text-gray-600 max-w-lg mx-auto leading-relaxed">
+                  <p className="text-base sm:text-xl text-gray-600 max-w-lg mx-auto leading-relaxed">
                     Drag and drop your Instagram JSON file here, or click the
                     button below to browse
                   </p>
@@ -209,15 +209,15 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
                   />
                   <label
                     htmlFor="file-upload"
-                    className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold text-lg rounded-2xl cursor-pointer hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105"
+                    className="inline-flex items-center px-6 py-4 sm:px-10 sm:py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold text-base sm:text-lg rounded-2xl cursor-pointer hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105"
                   >
-                    <span className="mr-3 text-2xl">📤</span>
+                    <span className="mr-2 sm:mr-3 text-xl sm:text-2xl">📤</span>
                     Upload & Process
                   </label>
                 </div>
 
                 {/* File Info */}
-                <div className="bg-gray-50 rounded-2xl p-6 max-w-md mx-auto">
+                <div className="bg-gray-50 rounded-2xl p-4 sm:p-6 max-w-md mx-auto">
                   <div className="space-y-3 text-sm text-gray-600">
                     <div className="flex items-center justify-center space-x-2">
                       <span className="w-2 h-2 bg-green-500 rounded-full"></span>

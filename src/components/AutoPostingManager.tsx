@@ -179,10 +179,10 @@ export default function AutoPostingManager() {
   return (
     <div className="flex-1 flex flex-col">
       {/* Header */}
-      <div className="flex-shrink-0 p-10 pb-6">
+      <div className="flex-shrink-0 p-6 sm:p-10 pb-4 sm:pb-6">
         {/* Account Tabs */}
-        <div className="w-full mb-6">
-          <div className="inline-flex p-1 bg-gray-100 rounded-2xl border border-gray-200 shadow-sm">
+        <div className="w-full mb-4 sm:mb-6">
+          <div className="inline-flex p-1 bg-gray-100 rounded-2xl border border-gray-200 shadow-sm max-w-full overflow-x-auto">
             <button
               onClick={() => {
                 if (selectedAccount !== "dreamchasers") {
@@ -229,22 +229,22 @@ export default function AutoPostingManager() {
             </button>
           </div>
         </div>
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
               Auto-Posting Manager
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-base sm:text-lg text-gray-600">
               Automate Instagram posting with intelligent content selection
             </p>
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <button
               onClick={startScheduler}
               disabled={isRunning || isStarting}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-medium shadow-sm hover:bg-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-emerald-600 text-white text-sm sm:text-base font-medium shadow-sm hover:bg-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isStarting ? "🚀 Starting..." : "🚀 Start Schedule"}
             </button>
@@ -252,14 +252,14 @@ export default function AutoPostingManager() {
             <button
               onClick={stopScheduler}
               disabled={!isRunning || isStopping}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 text-white font-medium shadow-sm hover:bg-rose-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-rose-600 text-white text-sm sm:text-base font-medium shadow-sm hover:bg-rose-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isStopping ? "⏹️ Stopping..." : "⏹️ Stop"}
             </button>
 
             <button
               onClick={postNow}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold shadow-sm hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-indigo-600 text-white text-sm sm:text-base font-semibold shadow-sm hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
             >
               ⚡ Post Now
             </button>
@@ -277,10 +277,10 @@ export default function AutoPostingManager() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto px-10 pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-10 pb-8 sm:pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
           {/* Scheduler Status */}
-          <div className="bg-white rounded-2xl shadow-soft border border-gray-200 p-6">
+          <div className="bg-white rounded-2xl shadow-soft border border-gray-200 p-4 sm:p-6">
             <div className="flex items-start justify-between mb-4">
               <h3 className="text-xl font-semibold text-gray-900">
                 Scheduler Status

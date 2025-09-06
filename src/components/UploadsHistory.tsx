@@ -136,13 +136,13 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center p-12">
+      <div className="flex-1 flex items-center justify-center p-8 sm:p-12">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin mb-4"></div>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin mb-3 sm:mb-4"></div>
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">
             Loading Upload History
           </h3>
-          <p className="text-gray-500">
+          <p className="text-gray-500 text-sm sm:text-base">
             Fetching your posts from the database...
           </p>
         </div>
@@ -152,18 +152,18 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
 
   if (error) {
     return (
-      <div className="flex-1 flex items-center justify-center p-12">
+      <div className="flex-1 flex items-center justify-center p-8 sm:p-12">
         <div className="text-center max-w-md">
-          <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-3 sm:mb-4">
             <span className="text-2xl">❌</span>
           </div>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">
             Error Loading Posts
           </h3>
-          <p className="text-gray-500 mb-4">{error}</p>
+          <p className="text-gray-500 text-sm sm:text-base mb-4">{error}</p>
           <button
             onClick={handleRefresh}
-            className="px-6 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition-all duration-200"
+            className="px-5 sm:px-6 py-2.5 sm:py-3 bg-purple-600 text-white rounded-xl text-sm font-medium hover:bg-purple-700 transition-all duration-200"
           >
             Try Again
           </button>
@@ -174,18 +174,18 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
 
   if (posts.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center p-12">
+      <div className="flex-1 flex items-center justify-center p-8 sm:p-12">
         <div className="text-center max-w-md">
-          <div className="w-24 h-24 mx-auto bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mb-6">
-            <span className="text-4xl">📤</span>
+          <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mb-5 sm:mb-6">
+            <span className="text-3xl sm:text-4xl">📤</span>
           </div>
-          <h3 className="text-2xl font-semibold text-gray-700 mb-3">
+          <h3 className="text-xl sm:text-2xl font-semibold text-gray-700 mb-3">
             No Uploads Found
           </h3>
-          <p className="text-gray-500 mb-4">
+          <p className="text-gray-500 text-sm sm:text-base mb-4">
             You haven't uploaded any Instagram data yet.
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-xs sm:text-sm text-gray-400">
             Upload a JSON file to see your posts here.
           </p>
         </div>
@@ -196,26 +196,26 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
   return (
     <div className="flex-1 flex flex-col">
       {/* Header */}
-      <div className="flex-shrink-0 p-10 pb-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="flex-shrink-0 p-6 sm:p-10 pb-4 sm:pb-6">
+        <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
               Upload History
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-base sm:text-lg text-gray-600">
               Manage your uploaded Instagram posts from the database
             </p>
           </div>
-          <div className="flex space-x-3">
+          <div className="flex gap-2 sm:space-x-3 flex-wrap">
             <button
               onClick={handleRefresh}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200"
+              className="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-all duration-200"
             >
               🔄 Refresh
             </button>
             <button
               onClick={handleLoadAllPosts}
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-medium"
+              className="px-5 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-medium"
             >
               📊 Load to Dashboard
             </button>
@@ -223,32 +223,32 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-5 gap-4 mb-6">
-          <div className="bg-white rounded-2xl p-4 text-center shadow-soft border border-gray-100">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <div className="bg-white rounded-2xl p-3 sm:p-4 text-center shadow-soft border border-gray-100">
             <div className="text-2xl font-bold text-purple-600 mb-1">
               {stats.total}
             </div>
             <div className="text-xs text-gray-500">Total Posts</div>
           </div>
-          <div className="bg-white rounded-2xl p-4 text-center shadow-soft border border-gray-100">
+          <div className="bg-white rounded-2xl p-3 sm:p-4 text-center shadow-soft border border-gray-100">
             <div className="text-2xl font-bold text-green-600 mb-1">
               {stats.today}
             </div>
             <div className="text-xs text-gray-500">Today</div>
           </div>
-          <div className="bg-white rounded-2xl p-4 text-center shadow-soft border border-gray-100">
+          <div className="bg-white rounded-2xl p-3 sm:p-4 text-center shadow-soft border border-gray-100">
             <div className="text-2xl font-bold text-blue-600 mb-1">
               {stats.thisWeek}
             </div>
             <div className="text-xs text-gray-500">This Week</div>
           </div>
-          <div className="bg-white rounded-2xl p-4 text-center shadow-soft border border-gray-100">
+          <div className="bg-white rounded-2xl p-3 sm:p-4 text-center shadow-soft border border-gray-100">
             <div className="text-2xl font-bold text-orange-600 mb-1">
               {formatNumber(stats.totalViews)}
             </div>
             <div className="text-xs text-gray-500">Total Views</div>
           </div>
-          <div className="bg-white rounded-2xl p-4 text-center shadow-soft border border-gray-100">
+          <div className="bg-white rounded-2xl p-3 sm:p-4 text-center shadow-soft border border-gray-100">
             <div className="text-2xl font-bold text-red-600 mb-1">
               {formatNumber(stats.totalLikes)}
             </div>
@@ -258,17 +258,17 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
       </div>
 
       {/* Posts List */}
-      <div className="flex-1 overflow-y-auto px-10 pb-10">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-10 pb-8 sm:pb-10">
         <div className="space-y-4">
           {posts.map((post, index) => (
             <div
               key={post._id}
-              className="bg-white rounded-2xl shadow-soft border border-gray-200 p-6 hover:shadow-medium transition-all duration-200"
+              className="bg-white rounded-2xl shadow-soft border border-gray-200 p-4 sm:p-6 hover:shadow-medium transition-all duration-200"
             >
               <div className="flex gap-4">
                 {/* Thumbnail */}
                 <div className="flex-shrink-0">
-                  <div className="w-20 h-20 bg-gradient-to-br from-purple-200 to-pink-200 rounded-xl shadow-medium">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-200 to-pink-200 rounded-xl shadow-medium">
                     {post.displayUrl ? (
                       <img
                         src={post.displayUrl}
@@ -290,19 +290,19 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
 
                 {/* Content */}
                 <div className="flex-1">
-                  <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-start justify-between mb-2 gap-3">
                     <div>
-                      <h4 className="font-semibold text-gray-900">
+                      <h4 className="font-semibold text-gray-900 text-sm sm:text-base">
                         @{post.ownerUsername}
                       </h4>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs sm:text-sm text-gray-500">
                         Uploaded:{" "}
                         {new Date(post.uploadedAt).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span
-                        className={`text-xs px-2 py-1 rounded-full font-medium ${
+                        className={`text-[10px] sm:text-xs px-2 py-1 rounded-full font-medium ${
                           post.type === "Video"
                             ? "bg-blue-100 text-blue-700"
                             : "bg-green-100 text-green-700"

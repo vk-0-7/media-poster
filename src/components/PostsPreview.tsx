@@ -143,24 +143,24 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
   return (
     <div className="flex-1 flex flex-col">
       {/* Header Section - Fixed */}
-      <div className="flex-shrink-0 p-10 pb-6">
-        <div className="flex items-center justify-between mb-8">
+      <div className="flex-shrink-0 p-6 sm:p-10 pb-4 sm:pb-6">
+        <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-8 gap-3">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
               Top Instagram Posts
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-base sm:text-lg text-gray-600">
               Posts sorted by view count - Select posts to schedule for
               auto-posting
             </p>
           </div>
 
           {/* View Mode Toggle */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-2 sm:space-x-4">
             <div className="flex bg-gray-100 rounded-xl p-1">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
                   viewMode === "grid"
                     ? "bg-white text-purple-600 shadow-soft"
                     : "text-gray-600 hover:text-gray-900"
@@ -170,7 +170,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
                   viewMode === "list"
                     ? "bg-white text-purple-600 shadow-soft"
                     : "text-gray-600 hover:text-gray-900"
@@ -183,14 +183,14 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
         </div>
 
         {/* Stats Summary */}
-        <div className="grid grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-2xl p-6 text-center shadow-soft border border-gray-100">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 text-center shadow-soft border border-gray-100">
             <div className="text-3xl font-bold text-purple-600 mb-2">
               {sortedPosts.length}
             </div>
             <div className="text-sm text-gray-500">Total Posts</div>
           </div>
-          <div className="bg-white rounded-2xl p-6 text-center shadow-soft border border-gray-100">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 text-center shadow-soft border border-gray-100">
             <div className="text-3xl font-bold text-green-600 mb-2">
               {formatNumber(
                 sortedPosts.reduce(
@@ -202,7 +202,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
             </div>
             <div className="text-sm text-gray-500">Total Likes</div>
           </div>
-          <div className="bg-white rounded-2xl p-6 text-center shadow-soft border border-gray-100">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 text-center shadow-soft border border-gray-100">
             <div className="text-3xl font-bold text-blue-600 mb-2">
               {formatNumber(
                 sortedPosts.reduce((sum, post) => sum + getViewCount(post), 0)
@@ -210,7 +210,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
             </div>
             <div className="text-sm text-gray-500">Total Views</div>
           </div>
-          <div className="bg-white rounded-2xl p-6 text-center shadow-soft border border-gray-100">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 text-center shadow-soft border border-gray-100">
             <div className="text-3xl font-bold text-orange-600 mb-2">
               {formatNumber(
                 sortedPosts.reduce((sum, post) => sum + post.commentsCount, 0)
@@ -222,9 +222,9 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
       </div>
 
       {/* Posts Display - Scrollable */}
-      <div className="flex-1  px-10 pb-10">
+      <div className="flex-1  px-4 sm:px-10 pb-8 sm:pb-10">
         {viewMode === "grid" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 overflow-y-scroll">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 overflow-y-scroll">
             {sortedPosts.map((post, index) => (
               <PostCard
                 key={post.id}
@@ -245,7 +245,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
             ))}
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {sortedPosts.map((post, index) => (
               <PostListItem
                 key={post.id}
