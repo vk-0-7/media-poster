@@ -35,6 +35,15 @@ export default function AutoPostingManager() {
   const [error, setError] = useState<string | null>(null)
   const [isStarting, setIsStarting] = useState(false)
   const [isStopping, setIsStopping] = useState(false)
+  const [selectedAccount, setSelectedAccount] = useState<
+    "dreamchasers" | "codingwithbugs"
+  >(
+    (typeof window !== "undefined" &&
+      (window.localStorage.getItem("selectedAccount") as
+        | "dreamchasers"
+        | "codingwithbugs")) ||
+      "dreamchasers"
+  )
   const isRunning = schedulerStatus?.status === "running"
 
   const startScheduler = async () => {
@@ -43,7 +52,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/start`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/start?account=${selectedAccount}`,
         {
           method: "POST",
           headers: {
@@ -75,7 +84,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/stop`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/stop?account=${selectedAccount}`,
         {
           method: "POST",
           headers: {
@@ -106,7 +115,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/manual-post`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/manual-post?account=${selectedAccount}`,
         {
           method: "POST",
           headers: {
@@ -132,7 +141,7 @@ export default function AutoPostingManager() {
   const fetchSchedulerStatus = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/status`
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/status?account=${selectedAccount}`
       )
 
       if (!response.ok) {
@@ -151,7 +160,7 @@ export default function AutoPostingManager() {
 
   useEffect(() => {
     fetchSchedulerStatus()
-  }, [])
+  }, [selectedAccount])
 
   if (loading) {
     return (
@@ -171,6 +180,55 @@ export default function AutoPostingManager() {
     <div className="flex-1 flex flex-col">
       {/* Header */}
       <div className="flex-shrink-0 p-10 pb-6">
+        {/* Account Tabs */}
+        <div className="w-full mb-6">
+          <div className="inline-flex p-1 bg-gray-100 rounded-2xl border border-gray-200 shadow-sm">
+            <button
+              onClick={() => {
+                if (selectedAccount !== "dreamchasers") {
+                  setLoading(true)
+                  setSelectedAccount("dreamchasers")
+                  if (typeof window !== "undefined") {
+                    window.localStorage.setItem(
+                      "selectedAccount",
+                      "dreamchasers"
+                    )
+                  }
+                }
+              }}
+              className={
+                "px-4 py-2 rounded-xl text-sm font-medium transition-all " +
+                (selectedAccount === "dreamchasers"
+                  ? "bg-white text-gray-900 shadow border border-gray-200"
+                  : "text-gray-600 hover:text-gray-900")
+              }
+            >
+              DreamChasers
+            </button>
+            <button
+              onClick={() => {
+                if (selectedAccount !== "codingwithbugs") {
+                  setLoading(true)
+                  setSelectedAccount("codingwithbugs")
+                  if (typeof window !== "undefined") {
+                    window.localStorage.setItem(
+                      "selectedAccount",
+                      "codingwithbugs"
+                    )
+                  }
+                }
+              }}
+              className={
+                "px-4 py-2 rounded-xl text-sm font-medium transition-all " +
+                (selectedAccount === "codingwithbugs"
+                  ? "bg-white text-gray-900 shadow border border-gray-200"
+                  : "text-gray-600 hover:text-gray-900")
+              }
+            >
+              CodingWithBugs
+            </button>
+          </div>
+        </div>
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-3">

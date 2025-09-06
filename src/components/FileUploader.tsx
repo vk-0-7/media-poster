@@ -41,6 +41,15 @@ interface FileUploaderProps {
 export default function FileUploader({ onFileUpload }: FileUploaderProps) {
   const [isDragOver, setIsDragOver] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [selectedAccount, setSelectedAccount] = useState<
+    "dreamchasers" | "codingwithbugs"
+  >(
+    (typeof window !== "undefined" &&
+      (window.localStorage.getItem("selectedAccount") as
+        | "dreamchasers"
+        | "codingwithbugs")) ||
+      "dreamchasers"
+  )
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -78,10 +87,56 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
     []
   )
 
-
   return (
     <div className="flex-1 flex items-center justify-center p-12">
       <div className="w-full max-w-4xl">
+        {/* Account Tabs */}
+        <div className="w-full mb-6 flex justify-center">
+          <div className="inline-flex p-1 bg-gray-100 rounded-2xl border border-gray-200 shadow-sm">
+            <button
+              onClick={() => {
+                if (selectedAccount !== "dreamchasers") {
+                  setSelectedAccount("dreamchasers")
+                  if (typeof window !== "undefined") {
+                    window.localStorage.setItem(
+                      "selectedAccount",
+                      "dreamchasers"
+                    )
+                  }
+                }
+              }}
+              className={
+                "px-4 py-2 rounded-xl text-sm font-medium transition-all " +
+                (selectedAccount === "dreamchasers"
+                  ? "bg-white text-gray-900 shadow border border-gray-200"
+                  : "text-gray-600 hover:text-gray-900")
+              }
+            >
+              DreamChasers
+            </button>
+            <button
+              onClick={() => {
+                if (selectedAccount !== "codingwithbugs") {
+                  setSelectedAccount("codingwithbugs")
+                  if (typeof window !== "undefined") {
+                    window.localStorage.setItem(
+                      "selectedAccount",
+                      "codingwithbugs"
+                    )
+                  }
+                }
+              }}
+              className={
+                "px-4 py-2 rounded-xl text-sm font-medium transition-all " +
+                (selectedAccount === "codingwithbugs"
+                  ? "bg-white text-gray-900 shadow border border-gray-200"
+                  : "text-gray-600 hover:text-gray-900")
+              }
+            >
+              CodingWithBugs
+            </button>
+          </div>
+        </div>
         {/* Header Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">

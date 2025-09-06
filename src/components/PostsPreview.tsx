@@ -43,6 +43,11 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
   const [editedCaption, setEditedCaption] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [playingVideos, setPlayingVideos] = useState<Set<string>>(new Set())
+  const [selectedAccount, setSelectedAccount] = useState<string | null>(
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("selectedAccount") || "dreamchasers"
+      : "dreamchasers"
+  )
 
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
@@ -93,7 +98,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
   const uploadPostsToBackend = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}posts/uploadJSON`,
+        `${process.env.NEXT_PUBLIC_API_URL}posts/uploadJSON?account=${selectedAccount}`,
         {
           method: "POST",
           headers: {
