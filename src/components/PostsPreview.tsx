@@ -1,6 +1,20 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import {
+  Edit3,
+  Save,
+  X,
+  Upload,
+  Calendar,
+  Heart,
+  MessageCircle,
+  Share2,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react"
+import { getAccountFromLocalStorage } from "../config/accounts"
 
 interface InstagramPost {
   id: string
@@ -43,10 +57,8 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
   const [editedCaption, setEditedCaption] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [playingVideos, setPlayingVideos] = useState<Set<string>>(new Set())
-  const [selectedAccount, setSelectedAccount] = useState<string | null>(
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("selectedAccount") || "dreamchasers"
-      : "dreamchasers"
+  const [selectedAccount, setSelectedAccount] = useState(
+    getAccountFromLocalStorage()
   )
 
   const formatNumber = (num: number) => {
@@ -98,7 +110,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
   const uploadPostsToBackend = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}posts/uploadJSON?account=${selectedAccount}`,
+        `${process.env.NEXT_PUBLIC_API_URL}posts/uploadJSON?account=${selectedAccount.id}`,
         {
           method: "POST",
           headers: {
@@ -141,7 +153,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
   }
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col h-full max-h-screen overflow-hidden">
       {/* Header Section - Fixed */}
       <div className="flex-shrink-0 p-6 sm:p-10 pb-4 sm:pb-6">
         <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-8 gap-3">
@@ -160,7 +172,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
             <div className="flex bg-gray-100 rounded-xl p-1">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
                   viewMode === "grid"
                     ? "bg-white text-purple-600 shadow-soft"
                     : "text-gray-600 hover:text-gray-900"
@@ -170,7 +182,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
                   viewMode === "list"
                     ? "bg-white text-purple-600 shadow-soft"
                     : "text-gray-600 hover:text-gray-900"
@@ -222,9 +234,9 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
       </div>
 
       {/* Posts Display - Scrollable */}
-      <div className="flex-1  px-4 sm:px-10 pb-8 sm:pb-10">
+      <div className="flex-1 px-4 sm:px-10 pb-8 sm:pb-10 min-h-0 overflow-hidden">
         {viewMode === "grid" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 overflow-y-scroll">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 overflow-y-auto max-h-full">
             {sortedPosts.map((post, index) => (
               <PostCard
                 key={post.id}
@@ -245,7 +257,7 @@ export default function PostsPreview({ posts }: PostsPreviewProps) {
             ))}
           </div>
         ) : (
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-4 sm:space-y-6 overflow-y-auto max-h-full">
             {sortedPosts.map((post, index) => (
               <PostListItem
                 key={post.id}
@@ -302,16 +314,16 @@ function PostCard({
   onVideoEnd: () => void
 }) {
   return (
-    <div className="bg-white rounded-3xl shadow-soft border border-gray-200 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:border-purple-200">
+    <div className="bg-white rounded-2xl shadow-soft border border-gray-200 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:border-purple-200">
       {/* Post Header */}
-      <div className="p-6 pb-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white font-bold text-sm shadow-medium">
+      <div className="p-4 pb-3">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-medium">
               #{index + 1}
             </div>
             <div>
-              <div className="text-sm font-medium text-gray-900">
+              <div className="text-xs font-medium text-gray-900">
                 {post.ownerUsername}
               </div>
               <div className="text-xs text-gray-500">
@@ -326,8 +338,8 @@ function PostCard({
         </div>
 
         {/* Post Image/Video */}
-        <div className="relative mb-4">
-          <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl  shadow-medium">
+        <div className="relative mb-3">
+          <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl shadow-medium">
             {post.type === "Video" && post.videoUrl ? (
               <div className="relative w-full h-full">
                 {isPlaying ? (
@@ -360,8 +372,8 @@ function PostCard({
                       onClick={onVideoClick}
                       className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-40 transition-all duration-200 group"
                     >
-                      <div className="w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
-                        <span className="text-2xl text-gray-800 ml-1">▶️</span>
+                      <div className="w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
+                        <span className="text-lg text-gray-800 ml-1">▶️</span>
                       </div>
                     </button>
                     {/* Video duration */}
@@ -396,35 +408,37 @@ function PostCard({
         </div>
 
         {/* Post Content */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {/* Caption */}
           {editingPost === post.id ? (
-            <div className="space-y-3">
+            <div className="space-y-2">
               <textarea
                 value={editedCaption}
                 onChange={(e) => setEditedCaption(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-xl resize-none text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                rows={3}
+                className="w-full p-2 border border-gray-300 rounded-lg resize-none text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={2}
                 placeholder="Edit your caption..."
               />
               <div className="flex gap-2">
                 <button
                   onClick={() => onSaveEdit(post.id)}
-                  className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-all duration-200"
+                  className="inline-flex items-center gap-1 px-3 py-2 bg-green-600 text-white text-xs font-medium rounded-lg hover:bg-green-700 transition-all duration-200"
                 >
+                  <Save className="w-3 h-3" />
                   Save
                 </button>
                 <button
                   onClick={() => setEditingPost(null)}
-                  className="px-4 py-2 bg-gray-500 text-white text-sm font-medium rounded-lg hover:bg-gray-600 transition-all duration-200"
+                  className="inline-flex items-center gap-1 px-3 py-2 bg-gray-500 text-white text-xs font-medium rounded-lg hover:bg-gray-600 transition-all duration-200"
                 >
+                  <X className="w-3 h-3" />
                   Cancel
                 </button>
               </div>
             </div>
           ) : (
             <div>
-              <p className="text-gray-700 text-sm leading-relaxed line-clamp-3">
+              <p className="text-gray-700 text-xs leading-relaxed line-clamp-2">
                 {post.caption}
               </p>
 
@@ -450,24 +464,24 @@ function PostCard({
           )}
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-lg font-bold text-red-500 mb-1">❤️</div>
-              <div className="text-sm font-semibold text-gray-900">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="bg-gray-50 rounded-lg p-2 text-center">
+              <Heart className="w-3 h-3 text-red-500 mb-1" />
+              <div className="text-xs font-semibold text-gray-900">
                 {post.likesCount > 0 ? formatNumber(post.likesCount) : "N/A"}
               </div>
               <div className="text-xs text-gray-500">Likes</div>
             </div>
-            <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-lg font-bold text-blue-500 mb-1">👁️</div>
-              <div className="text-sm font-semibold text-gray-900">
+            <div className="bg-gray-50 rounded-lg p-2 text-center">
+              <div className="text-sm font-bold text-blue-500 mb-1">👁️</div>
+              <div className="text-xs font-semibold text-gray-900">
                 {formatNumber(getViewCount(post))}
               </div>
               <div className="text-xs text-gray-500">Views</div>
             </div>
-            <div className="bg-gray-50 rounded-xl p-3 text-center">
-              <div className="text-lg font-bold text-green-500 mb-1">💬</div>
-              <div className="text-sm font-semibold text-gray-900">
+            <div className="bg-gray-50 rounded-lg p-2 text-center">
+              <MessageCircle className="w-3 h-3 text-green-500 mb-1" />
+              <div className="text-xs font-semibold text-gray-900">
                 {formatNumber(post.commentsCount)}
               </div>
               <div className="text-xs text-gray-500">Comments</div>
@@ -476,11 +490,12 @@ function PostCard({
 
           {/* Action Buttons */}
           {editingPost !== post.id && (
-            <div className="flex gap-2 pt-2">
+            <div className="flex gap-2 pt-1">
               <button
                 onClick={onEdit}
-                className="px-3 py-2 bg-purple-100 text-purple-700 rounded-xl text-sm font-medium hover:bg-purple-200 transition-all duration-200 border border-purple-200"
+                className="inline-flex items-center gap-1 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-200 transition-all duration-200 border border-blue-200"
               >
+                <Edit3 className="w-3 h-3" />
                 Edit
               </button>
             </div>
@@ -628,21 +643,23 @@ function PostListItem({
                   <textarea
                     value={editedCaption}
                     onChange={(e) => setEditedCaption(e.target.value)}
-                    className="w-full p-4 border border-gray-300 rounded-2xl resize-none text-base focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full p-4 border border-gray-300 rounded-2xl resize-none text-base focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={4}
                     placeholder="Edit your caption..."
                   />
                   <div className="flex gap-3">
                     <button
                       onClick={() => onSaveEdit(post.id)}
-                      className="px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-all duration-200 shadow-medium hover:shadow-lg"
+                      className="inline-flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-all duration-200 shadow-medium hover:shadow-lg"
                     >
+                      <Save className="w-4 h-4" />
                       Save Changes
                     </button>
                     <button
                       onClick={() => setEditingPost(null)}
-                      className="px-6 py-2 bg-gray-500 text-white text-sm font-medium rounded-xl hover:bg-gray-600 transition-all duration-200"
+                      className="inline-flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 bg-gray-500 text-white text-sm font-medium rounded-xl hover:bg-gray-600 transition-all duration-200"
                     >
+                      <X className="w-4 h-4" />
                       Cancel
                     </button>
                   </div>
@@ -681,7 +698,7 @@ function PostListItem({
             {/* Stats Grid */}
             <div className="grid grid-cols-4 gap-6">
               <div className="bg-gray-50 rounded-2xl p-4 text-center">
-                <div className="text-2xl font-bold text-red-500 mb-1">❤️</div>
+                <Heart className="w-6 h-6 text-red-500 mb-1" />
                 <div className="text-lg font-semibold text-gray-900">
                   {post.likesCount > 0 ? formatNumber(post.likesCount) : "N/A"}
                 </div>
@@ -695,7 +712,7 @@ function PostListItem({
                 <div className="text-sm text-gray-500">Views</div>
               </div>
               <div className="bg-gray-50 rounded-2xl p-4 text-center">
-                <div className="text-2xl font-bold text-green-500 mb-1">💬</div>
+                <MessageCircle className="w-6 h-6 text-green-500 mb-1" />
                 <div className="text-lg font-semibold text-gray-900">
                   {formatNumber(post.commentsCount)}
                 </div>
@@ -717,8 +734,9 @@ function PostListItem({
               <div className="flex gap-4 pt-4">
                 <button
                   onClick={onEdit}
-                  className="px-6 py-3 bg-purple-100 text-purple-700 rounded-2xl text-sm font-semibold hover:bg-purple-200 transition-all duration-200 shadow-medium hover:shadow-lg border border-purple-200"
+                  className="inline-flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 bg-blue-100 text-blue-700 rounded-2xl text-sm font-semibold hover:bg-blue-200 transition-all duration-200 shadow-medium hover:shadow-lg border border-blue-200"
                 >
+                  <Edit3 className="w-4 h-4" />
                   Edit Caption
                 </button>
               </div>

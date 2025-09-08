@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { RefreshCw, Database, Calendar, FileText, Loader2 } from "lucide-react"
 
 interface InstagramPost {
   _id: string
@@ -163,7 +164,7 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
           <p className="text-gray-500 text-sm sm:text-base mb-4">{error}</p>
           <button
             onClick={handleRefresh}
-            className="px-5 sm:px-6 py-2.5 sm:py-3 bg-purple-600 text-white rounded-xl text-sm font-medium hover:bg-purple-700 transition-all duration-200"
+            className="px-4 py-3 bg-purple-600 text-white rounded-xl text-sm font-medium hover:bg-purple-700 transition-all duration-200"
           >
             Try Again
           </button>
@@ -194,7 +195,7 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
   }
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col h-full max-h-screen overflow-hidden">
       {/* Header */}
       <div className="flex-shrink-0 p-6 sm:p-10 pb-4 sm:pb-6">
         <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3">
@@ -209,15 +210,17 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
           <div className="flex gap-2 sm:space-x-3 flex-wrap">
             <button
               onClick={handleRefresh}
-              className="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-all duration-200"
+              className="inline-flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-all duration-200"
             >
-              🔄 Refresh
+              <RefreshCw className="w-4 h-4" />
+              Refresh
             </button>
             <button
               onClick={handleLoadAllPosts}
-              className="px-5 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-medium"
+              className="inline-flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-medium"
             >
-              📊 Load to Dashboard
+              <Database className="w-4 h-4" />
+              Load to Dashboard
             </button>
           </div>
         </div>
@@ -258,17 +261,17 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
       </div>
 
       {/* Posts List */}
-      <div className="flex-1 overflow-y-auto px-4 sm:px-10 pb-8 sm:pb-10">
-        <div className="space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-10 pb-8 sm:pb-10 min-h-0">
+        <div className="space-y-3">
           {posts.map((post, index) => (
             <div
               key={post._id}
-              className="bg-white rounded-2xl shadow-soft border border-gray-200 p-4 sm:p-6 hover:shadow-medium transition-all duration-200"
+              className="bg-white rounded-xl shadow-soft border border-gray-200 p-3 sm:p-4 hover:shadow-medium transition-all duration-200"
             >
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 {/* Thumbnail */}
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-200 to-pink-200 rounded-xl shadow-medium">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-purple-200 to-pink-200 rounded-lg shadow-medium">
                     {post.displayUrl ? (
                       <img
                         src={post.displayUrl}
@@ -280,7 +283,7 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-2xl">
+                        <span className="text-lg">
                           {post.type === "Video" ? "🎥" : "🖼️"}
                         </span>
                       </div>
@@ -290,19 +293,19 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
 
                 {/* Content */}
                 <div className="flex-1">
-                  <div className="flex items-start justify-between mb-2 gap-3">
+                  <div className="flex items-start justify-between mb-1 gap-2">
                     <div>
-                      <h4 className="font-semibold text-gray-900 text-sm sm:text-base">
+                      <h4 className="font-semibold text-gray-900 text-xs sm:text-sm">
                         @{post.ownerUsername}
                       </h4>
-                      <p className="text-xs sm:text-sm text-gray-500">
+                      <p className="text-xs text-gray-500">
                         Uploaded:{" "}
                         {new Date(post.uploadedAt).toLocaleDateString()}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1">
                       <span
-                        className={`text-[10px] sm:text-xs px-2 py-1 rounded-full font-medium ${
+                        className={`text-[10px] px-2 py-1 rounded-full font-medium ${
                           post.type === "Video"
                             ? "bg-blue-100 text-blue-700"
                             : "bg-green-100 text-green-700"
@@ -313,14 +316,14 @@ export default function UploadsHistory({ onLoadPosts }: UploadsHistoryProps) {
                     </div>
                   </div>
 
-                  <p className="text-gray-700 text-sm mb-3 line-clamp-2">
-                    {post.caption.length > 100
-                      ? `${post.caption.substring(0, 100)}...`
+                  <p className="text-gray-700 text-xs mb-2 line-clamp-2">
+                    {post.caption.length > 80
+                      ? `${post.caption.substring(0, 80)}...`
                       : post.caption}
                   </p>
 
                   {/* Stats */}
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                  <div className="flex items-center space-x-3 text-xs text-gray-500">
                     <div className="flex items-center space-x-1">
                       <span>❤️</span>
                       <span>

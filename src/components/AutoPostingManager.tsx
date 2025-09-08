@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Play, Square, Zap, Loader2 } from "lucide-react"
+import { ACCOUNTS, getAccountFromLocalStorage } from "../config/accounts"
 
 interface SchedulerStatus {
   status: string
@@ -35,14 +37,8 @@ export default function AutoPostingManager() {
   const [error, setError] = useState<string | null>(null)
   const [isStarting, setIsStarting] = useState(false)
   const [isStopping, setIsStopping] = useState(false)
-  const [selectedAccount, setSelectedAccount] = useState<
-    "dreamchasers" | "codingwithbugs"
-  >(
-    (typeof window !== "undefined" &&
-      (window.localStorage.getItem("selectedAccount") as
-        | "dreamchasers"
-        | "codingwithbugs")) ||
-      "dreamchasers"
+  const [selectedAccount, setSelectedAccount] = useState(
+    getAccountFromLocalStorage()
   )
   const isRunning = schedulerStatus?.status === "running"
 
@@ -52,7 +48,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/start?account=${selectedAccount}`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/start?account=${selectedAccount.id}`,
         {
           method: "POST",
           headers: {
@@ -84,7 +80,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/stop?account=${selectedAccount}`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/stop?account=${selectedAccount.id}`,
         {
           method: "POST",
           headers: {
@@ -115,7 +111,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/manual-post?account=${selectedAccount}`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/manual-post?account=${selectedAccount.id}`,
         {
           method: "POST",
           headers: {
@@ -141,7 +137,7 @@ export default function AutoPostingManager() {
   const fetchSchedulerStatus = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/status?account=${selectedAccount}`
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/status?account=${selectedAccount.id}`
       )
 
       if (!response.ok) {
@@ -183,50 +179,28 @@ export default function AutoPostingManager() {
         {/* Account Tabs */}
         <div className="w-full mb-4 sm:mb-6">
           <div className="inline-flex p-1 bg-gray-100 rounded-2xl border border-gray-200 shadow-sm max-w-full overflow-x-auto">
-            <button
-              onClick={() => {
-                if (selectedAccount !== "dreamchasers") {
-                  setLoading(true)
-                  setSelectedAccount("dreamchasers")
-                  if (typeof window !== "undefined") {
-                    window.localStorage.setItem(
-                      "selectedAccount",
-                      "dreamchasers"
-                    )
+            {ACCOUNTS.map((account) => (
+              <button
+                key={account.id}
+                onClick={() => {
+                  if (selectedAccount.id !== account.id) {
+                    setLoading(true)
+                    setSelectedAccount(account)
+                    if (typeof window !== "undefined") {
+                      window.localStorage.setItem("selectedAccount", account.id)
+                    }
                   }
+                }}
+                className={
+                  "px-4 py-2 rounded-xl text-sm font-medium transition-all " +
+                  (selectedAccount.id === account.id
+                    ? "bg-white text-gray-900 shadow border border-gray-200"
+                    : "text-gray-600 hover:text-gray-900")
                 }
-              }}
-              className={
-                "px-4 py-2 rounded-xl text-sm font-medium transition-all " +
-                (selectedAccount === "dreamchasers"
-                  ? "bg-white text-gray-900 shadow border border-gray-200"
-                  : "text-gray-600 hover:text-gray-900")
-              }
-            >
-              DreamChasers
-            </button>
-            <button
-              onClick={() => {
-                if (selectedAccount !== "codingwithbugs") {
-                  setLoading(true)
-                  setSelectedAccount("codingwithbugs")
-                  if (typeof window !== "undefined") {
-                    window.localStorage.setItem(
-                      "selectedAccount",
-                      "codingwithbugs"
-                    )
-                  }
-                }
-              }}
-              className={
-                "px-4 py-2 rounded-xl text-sm font-medium transition-all " +
-                (selectedAccount === "codingwithbugs"
-                  ? "bg-white text-gray-900 shadow border border-gray-200"
-                  : "text-gray-600 hover:text-gray-900")
-              }
-            >
-              CodingWithBugs
-            </button>
+              >
+                {account.displayName}
+              </button>
+            ))}
           </div>
         </div>
         <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
@@ -244,24 +218,35 @@ export default function AutoPostingManager() {
             <button
               onClick={startScheduler}
               disabled={isRunning || isStarting}
-              className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-emerald-600 text-white text-sm sm:text-base font-medium shadow-sm hover:bg-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 rounded-xl bg-emerald-600 text-white text-sm sm:text-base font-medium shadow-sm hover:bg-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isStarting ? "🚀 Starting..." : "🚀 Start Schedule"}
+              {isStarting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Play className="w-4 h-4" />
+              )}
+              {isStarting ? "Starting..." : "Start Schedule"}
             </button>
 
             <button
               onClick={stopScheduler}
               disabled={!isRunning || isStopping}
-              className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-rose-600 text-white text-sm sm:text-base font-medium shadow-sm hover:bg-rose-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 rounded-xl bg-rose-600 text-white text-sm sm:text-base font-medium shadow-sm hover:bg-rose-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isStopping ? "⏹️ Stopping..." : "⏹️ Stop"}
+              {isStopping ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Square className="w-4 h-4" />
+              )}
+              {isStopping ? "Stopping..." : "Stop"}
             </button>
 
             <button
               onClick={postNow}
-              className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-indigo-600 text-white text-sm sm:text-base font-semibold shadow-sm hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              className="inline-flex items-center gap-2 px-4 py-3 md:px-6 md:py-4 rounded-xl bg-blue-600 text-white text-sm sm:text-base font-semibold shadow-sm hover:bg-blue-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             >
-              ⚡ Post Now
+              <Zap className="w-4 h-4" />
+              Post Now
             </button>
           </div>
         </div>

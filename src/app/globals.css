@@ -1,18 +1,20 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  /* Enhanced Instagram-inspired color palette */
-  --primary: #833ab4;
-  --primary-light: #8a3ab9;
-  --primary-dark: #6a2c8f;
-  --secondary: #fd1d1d;
-  --secondary-light: #fcb045;
-  --secondary-dark: #e01b1b;
-  --accent: #00d4aa;
-  --accent-light: #00e6b8;
+  /* Modern Professional Color Palette */
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary: #7c3aed;
+  --secondary-light: #8b5cf6;
+  --secondary-dark: #6d28d9;
+  --accent: #059669;
+  --accent-light: #10b981;
   
   /* Background colors */
-  --background: #ffffff;
+  --background: #fafbfc;
   --background-secondary: #f8fafc;
   --background-tertiary: #f1f5f9;
   --surface: #ffffff;
@@ -30,21 +32,21 @@
   --text-light: #94a3b8;
   
   /* Status colors */
-  --success: #10b981;
-  --success-light: #34d399;
-  --warning: #f59e0b;
-  --warning-light: #fbbf24;
-  --error: #ef4444;
-  --error-light: #f87171;
-  --info: #3b82f6;
-  --info-light: #60a5fa;
+  --success: #059669;
+  --success-light: #10b981;
+  --warning: #d97706;
+  --warning-light: #f59e0b;
+  --error: #dc2626;
+  --error-light: #ef4444;
+  --info: #2563eb;
+  --info-light: #3b82f6;
   
-  /* Instagram gradients */
-  --gradient-instagram: linear-gradient(45deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
-  --gradient-subtle: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-soft: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-warm: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  --gradient-cool: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  /* Professional gradients */
+  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  --gradient-subtle: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  --gradient-soft: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  --gradient-warm: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+  --gradient-cool: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
   
   /* Shadows */
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -109,7 +111,7 @@ body {
 
 /* Utility classes */
 .gradient-text {
-  background: var(--gradient-instagram);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -123,7 +125,7 @@ body {
 }
 
 .gradient-bg {
-  background: var(--gradient-instagram);
+  background: var(--gradient-primary);
 }
 
 .gradient-bg-subtle {
