@@ -12,6 +12,11 @@ export const ACCOUNTS: Account[] = [
     displayName: "CodingWithBugs",
   },
   { id: "vallendros", name: "Vallendros", displayName: "Vallendros" },
+  {
+    id: "dailyAIInsights",
+    name: "DailyAIInsights",
+    displayName: "DailyAIInsights",
+  },
 ]
 
 export const DEFAULT_ACCOUNT = ACCOUNTS[0]
