@@ -163,9 +163,6 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
           ) : (
             <div className="space-y-10">
               {/* Icon */}
-              <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto bg-gradient-to-br from-blue-100 to-indigo-100 rounded-3xl flex items-center justify-center shadow-large">
-                <FileText className="w-12 h-12 sm:w-14 sm:h-14 text-blue-600" />
-              </div>
 
               {/* Content */}
               <div className="space-y-6">
