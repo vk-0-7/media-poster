@@ -1,12 +1,15 @@
 "use client"
 
-import { useState } from "react"
-import { Menu } from "lucide-react"
+import { ReactNode, useMemo, useState } from "react"
+import { BarChart3, Bot, Menu, Upload } from "lucide-react"
 import Sidebar from "./Sidebar"
 import FileUploader from "./FileUploader"
 import PostsPreview from "./PostsPreview"
 import UploadsHistory from "./UploadsHistory"
-import AutoPostingManager from "./AutoPostingManager"
+import AutoPostingManager from "./Instagram/scheduler"
+import { ACCOUNTS } from "@/data/accountsData"
+import { useAccountStore } from "@/store/accountStore"
+import { Account } from "@/types"
 
 interface InstagramPost {
   id: string
@@ -40,44 +43,25 @@ interface InstagramPost {
   isCommentsDisabled: boolean
 }
 
-export default function Dashboard() {
+export default function Dashboard({ children }: { children: React.ReactNode }) {
+  const { activePlatform, activeAccountByPlatform } = useAccountStore()
   const [activeTab, setActiveTab] = useState("dashboard")
   const [uploadedData, setUploadedData] = useState<InstagramPost[]>([])
   const [posts, setPosts] = useState<InstagramPost[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const handleFileUpload = (data: InstagramPost[]) => {
+  var handleFileUpload = (data: InstagramPost[]) => {
     setUploadedData(data)
     setPosts(data)
   }
 
-  const handleLoadPostsFromDB = (data: InstagramPost[]) => {
+  var handleLoadPostsFromDB = (data: InstagramPost[]) => {
     setPosts(data)
     setActiveTab("dashboard") // Switch to dashboard to show loaded posts
   }
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen)
-  }
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case "dashboard":
-        return posts.length > 0 ? (
-          <PostsPreview posts={posts} />
-        ) : (
-          <FileUploader onFileUpload={handleFileUpload} />
-        )
-
-      case "uploads":
-        return <UploadsHistory onLoadPosts={handleLoadPostsFromDB} />
-
-      case "schedule":
-        return <AutoPostingManager />
-
-      default:
-        return <FileUploader onFileUpload={handleFileUpload} />
-    }
   }
 
   return (
@@ -92,55 +76,74 @@ export default function Dashboard() {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 h-screen max-h-screen overflow-hidden">
-        {/* Top Navigation Bar */}
-        <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200/60 px-4 sm:px-8 py-4 sm:py-6 shadow-soft">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div className="flex items-center space-x-3 sm:space-x-6">
-              {/* Hamburger Menu Button */}
-              <button
-                onClick={toggleSidebar}
-                className="lg:hidden p-2 md:p-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-              >
-                <Menu className="w-5 h-5 text-gray-600" />
-              </button>
+        {/* Top Navigation Bar - Account Switcher */}
+        <div className="border-b border-indigo-100/80 bg-white/80 backdrop-blur-xl shadow-sm">
+          <div className="px-6 py-4">
+            <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
+              {ACCOUNTS?.filter((v: Account) => v.platform == activePlatform)?.map(
+                (a: Account) => {
+                  const isActive = activeAccountByPlatform[a.platform] === a.id
+                  return (
+                    <button
+                      key={a.id}
+                      className={`
+                        group relative px-5 py-3 rounded-2xl
+                        transition-all duration-300 ease-out
+                        flex items-center gap-3 min-w-fit
+                        ${
+                          isActive
+                            ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 scale-105"
+                            : "bg-white text-slate-700 hover:bg-indigo-50 border border-indigo-200/60 hover:border-indigo-300 hover:shadow-md"
+                        }
+                      `}
+                      onClick={() =>
+                        useAccountStore.getState().setActiveAccount(a.platform, a.id)
+                      }
+                    >
+                      {/* Active Indicator Glow */}
+                      {isActive && (
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 opacity-10 blur-xl" />
+                      )}
 
-              <div className="flex items-center space-x-3">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-medium">
-                  <span className="text-white text-base sm:text-lg font-bold">
-                    {activeTab.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
-                    {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-                  </h1>
-                  <p className="text-xs sm:text-sm text-slate-500">
-                    {activeTab === "dashboard" &&
-                      "Manage your Instagram content"}
-                    {activeTab === "uploads" &&
-                      "View upload history and analytics"}
-                    {activeTab === "schedule" &&
-                      "Automate your Instagram posting"}
-                    {activeTab === "settings" && "Configure your preferences"}
-                  </p>
-                </div>
-              </div>
+                      {/* Avatar */}
+                      {a.avatarUrl && (
+                        <div className="relative z-10">
+                          <img
+                            src={a.avatarUrl}
+                            alt={a.displayName || a.handle}
+                            className={`
+                              w-9 h-9 rounded-full ring-2 transition-all duration-300
+                              ${isActive ? "ring-white/40 shadow-md" : "ring-indigo-200/50 group-hover:ring-indigo-300"}
+                            `}
+                          />
+                          {isActive && (
+                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-sm" />
+                          )}
+                        </div>
+                      )}
 
-              {posts.length > 0 && (
-                <div className="hidden sm:flex items-center space-x-3 bg-blue-50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-blue-200">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                  <span className="text-xs sm:text-sm font-medium text-blue-700">
-                    {posts.length} posts loaded
-                  </span>
-                </div>
+                      {/* Account Info */}
+                      <div className="flex flex-col items-start z-10">
+                        <span className={`font-semibold text-sm leading-tight ${isActive ? "text-white" : "text-slate-800"}`}>
+                          {a.displayName || a.handle}
+                        </span>
+                        <span className={`text-xs font-medium ${isActive ? "text-indigo-100" : "text-slate-500"}`}>
+                          {a.platform}
+                        </span>
+                      </div>
+                    </button>
+                  )
+                }
               )}
             </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 bg-gradient-to-br from-slate-50/50 to-blue-50/50 overflow-hidden">
-          {renderContent()}
+        {/* Main Content with Modern Card Design */}
+        <div className="flex-1 p-6 overflow-hidden">
+          <div className="h-full rounded-3xl bg-white/60 backdrop-blur-sm border border-indigo-100/50 shadow-xl overflow-hidden">
+            {children}
+          </div>
         </div>
       </div>
     </div>

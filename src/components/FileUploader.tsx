@@ -121,7 +121,7 @@ export default function FileUploader({ onFileUpload }: FileUploaderProps) {
         {/* Header Section */}
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-            Welcome to <span className="gradient-text">InstaPoster</span>
+            Welcome to <span className="gradient-text">mediaPoster</span>
           </h1>
           <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Upload your Instagram data and let us help you create the perfect

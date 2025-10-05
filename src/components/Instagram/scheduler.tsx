@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Play, Square, Zap, Loader2 } from "lucide-react"
-import { ACCOUNTS, getAccountFromLocalStorage } from "../config/accounts"
+import { useAccountStore } from "@/store/accountStore"
 
 interface SchedulerStatus {
   status: string
@@ -30,16 +30,17 @@ interface PostingHistory {
   timestamp: string
 }
 
-export default function AutoPostingManager() {
+export default function InstaScheduler() {
   const [schedulerStatus, setSchedulerStatus] =
     useState<SchedulerStatus | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isStarting, setIsStarting] = useState(false)
   const [isStopping, setIsStopping] = useState(false)
-  const [selectedAccount, setSelectedAccount] = useState(
-    getAccountFromLocalStorage()
-  )
+  const { activeAccountByPlatform, activePlatform } = useAccountStore()
+
+  const activeAccount = activeAccountByPlatform[activePlatform]
+
   const isRunning = schedulerStatus?.status === "running"
 
   const startScheduler = async () => {
@@ -48,7 +49,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/start?account=${selectedAccount.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/start?account=${activeAccount}`,
         {
           method: "POST",
           headers: {
@@ -80,7 +81,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/stop?account=${selectedAccount.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/stop?account=${activeAccount}`,
         {
           method: "POST",
           headers: {
@@ -111,7 +112,7 @@ export default function AutoPostingManager() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/manual-post?account=${selectedAccount.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/manual-post?account=${activeAccount}`,
         {
           method: "POST",
           headers: {
@@ -137,7 +138,7 @@ export default function AutoPostingManager() {
   const fetchSchedulerStatus = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/status?account=${selectedAccount.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}scheduler/status?account=${activeAccount}`
       )
 
       if (!response.ok) {
@@ -156,7 +157,7 @@ export default function AutoPostingManager() {
 
   useEffect(() => {
     fetchSchedulerStatus()
-  }, [selectedAccount])
+  }, [activeAccount])
 
   if (loading) {
     return (
@@ -176,33 +177,6 @@ export default function AutoPostingManager() {
     <div className="flex-1 flex flex-col">
       {/* Header */}
       <div className="flex-shrink-0 p-6 sm:p-10 pb-4 sm:pb-6">
-        {/* Account Tabs */}
-        <div className="w-full mb-4 sm:mb-6">
-          <div className="inline-flex p-1 bg-gray-100 rounded-2xl border border-gray-200 shadow-sm max-w-full overflow-x-auto">
-            {ACCOUNTS.map((account) => (
-              <button
-                key={account.id}
-                onClick={() => {
-                  if (selectedAccount.id !== account.id) {
-                    setLoading(true)
-                    setSelectedAccount(account)
-                    if (typeof window !== "undefined") {
-                      window.localStorage.setItem("selectedAccount", account.id)
-                    }
-                  }
-                }}
-                className={
-                  "px-4 py-2 rounded-xl text-sm font-medium transition-all " +
-                  (selectedAccount.id === account.id
-                    ? "bg-white text-gray-900 shadow border border-gray-200"
-                    : "text-gray-600 hover:text-gray-900")
-                }
-              >
-                {account.displayName}
-              </button>
-            ))}
-          </div>
-        </div>
         <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4">
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">

@@ -1,5 +1,5 @@
 # MongoDB Database
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/instaposter?retryWrites=true&w=majority&appName=Cluster0
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/mediaPoster?retryWrites=true&w=majority&appName=Cluster0
 
 # Instagram API Credentials
 # Get these from Facebook Developer Console -> Instagram Basic Display / Instagram Graph API
