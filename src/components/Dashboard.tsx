@@ -3,8 +3,6 @@
 import { ReactNode, useMemo, useState } from "react"
 import { BarChart3, Bot, Menu, Upload } from "lucide-react"
 import Sidebar from "./Sidebar"
-import FileUploader from "./FileUploader"
-import PostsPreview from "./PostsPreview"
 import UploadsHistory from "./UploadsHistory"
 import AutoPostingManager from "./Instagram/scheduler"
 import { ACCOUNTS } from "@/data/accountsData"
