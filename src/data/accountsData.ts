@@ -7,6 +7,15 @@ export const PLATFORMS: Platform[] = [
   "tiktok",
 ]
 
+export const Communities: Record<string, string> = {
+  softwareEngineering: "1699807431709041070",
+  BuildInPublic: "1493446837214187523",
+  webDevelopers: "1488952693443997701",
+  startupCommunity: "1471580197908586507",
+  Memes: "1669501013441806336",
+  TechTwitter: "1472105760389668865",
+}
+
 // fixed 4 accounts per platform
 export const ACCOUNTS: Account[] = [
   // Instagram (4)
@@ -36,13 +45,18 @@ export const ACCOUNTS: Account[] = [
   },
 
   // Twitter (4)
-  { id: "tw-1", platform: "twitter", handle: "@tw_one", displayName: "TW One" },
+  {
+    id: "tw-1",
+    platform: "twitter",
+    handle: "@tw_one",
+    displayName: "@maria_in_tech",
+  },
   { id: "tw-2", platform: "twitter", handle: "@tw_two", displayName: "TW Two" },
   {
     id: "tw-3",
     platform: "twitter",
     handle: "@tw_three",
-    displayName: "TW Three",
+    displayName: "@me_divya",
   },
 
   // Facebook (4)
