@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Play, Square, Zap, Loader2 } from "lucide-react"
 import { useAccountStore } from "@/store/accountStore"
+import { ACCOUNTS } from "@/data/accountsData"
 
 interface SchedulerStatus {
   status: string
@@ -30,7 +31,7 @@ interface PostingHistory {
   timestamp: string
 }
 
-export default function InstaScheduler() {
+export default function TwitterScheduler() {
   const [schedulerStatus, setSchedulerStatus] =
     useState<SchedulerStatus | null>(null)
   const [loading, setLoading] = useState(true)
@@ -38,10 +39,19 @@ export default function InstaScheduler() {
   const [isStarting, setIsStarting] = useState(false)
   const [isStopping, setIsStopping] = useState(false)
   const { activeAccountByPlatform, activePlatform } = useAccountStore()
-
-  const activeAccount = activeAccountByPlatform[activePlatform]
+  const activeAccountId = activeAccountByPlatform["twitter"]
+  const activeAccount = ACCOUNTS.find((a) => a.id === activeAccountId)
 
   const isRunning = schedulerStatus?.status === "running"
+
+  const getAccountName = () => {
+    if (!activeAccount) return "maria"
+    // Map from display names to backend account names
+    if (activeAccount.displayName === "@maria_in_tech") return "maria"
+    if (activeAccount.displayName === "@me_divya") return "divya"
+    return "maria" // default
+  }
+  console.log(getAccountName())
 
   const startScheduler = async () => {
     setIsStarting(true)
@@ -49,7 +59,9 @@ export default function InstaScheduler() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/start?account=${activeAccount}`,
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }scheduler/start?account=${getAccountName()}`,
         {
           method: "POST",
           headers: {
@@ -81,7 +93,9 @@ export default function InstaScheduler() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/stop?account=${activeAccount}`,
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }scheduler/stop?account=${getAccountName()}`,
         {
           method: "POST",
           headers: {
@@ -112,7 +126,9 @@ export default function InstaScheduler() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/manual-post?account=${activeAccount}`,
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }scheduler/manual-post?account=${getAccountName()}`,
         {
           method: "POST",
           headers: {
@@ -138,7 +154,9 @@ export default function InstaScheduler() {
   const fetchSchedulerStatus = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/status?account=${activeAccount}`
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }scheduler/status?account=${getAccountName()}`
       )
 
       if (!response.ok) {
