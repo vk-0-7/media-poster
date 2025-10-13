@@ -3,7 +3,7 @@ export type Account = {
   id: string
   platform: Platform
   handle: string
-  displayName?: string
+  displayName: string
   avatarUrl?: string
   connected?: boolean
 }

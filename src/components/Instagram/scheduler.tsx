@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Play, Square, Zap, Loader2 } from "lucide-react"
 import { useAccountStore } from "@/store/accountStore"
+import { ACCOUNTS } from "@/data/accountsData"
 
 interface SchedulerStatus {
   status: string
@@ -39,7 +40,9 @@ export default function InstaScheduler() {
   const [isStopping, setIsStopping] = useState(false)
   const { activeAccountByPlatform, activePlatform } = useAccountStore()
 
-  const activeAccount = activeAccountByPlatform[activePlatform]
+  const activeAccountId = activeAccountByPlatform[activePlatform]
+  const activeAccount = ACCOUNTS.find((a) => a.id === activeAccountId)
+  console.log(activeAccount)
 
   const isRunning = schedulerStatus?.status === "running"
 
@@ -49,7 +52,7 @@ export default function InstaScheduler() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/start?account=${activeAccount}`,
+        `${process.env.NEXT_PUBLIC_API_URL}instagram/scheduler/start?account=${activeAccountId}`,
         {
           method: "POST",
           headers: {
@@ -81,7 +84,7 @@ export default function InstaScheduler() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/stop?account=${activeAccount}`,
+        `${process.env.NEXT_PUBLIC_API_URL}instagram/scheduler/stop?account=${activeAccountId}`,
         {
           method: "POST",
           headers: {
@@ -112,7 +115,7 @@ export default function InstaScheduler() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/manual-post?account=${activeAccount}`,
+        `${process.env.NEXT_PUBLIC_API_URL}instagram/scheduler/manual-post?account=${activeAccountId}`,
         {
           method: "POST",
           headers: {
@@ -138,7 +141,7 @@ export default function InstaScheduler() {
   const fetchSchedulerStatus = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}scheduler/status?account=${activeAccount}`
+        `${process.env.NEXT_PUBLIC_API_URL}instagram/scheduler/status?account=${activeAccountId}`
       )
 
       if (!response.ok) {

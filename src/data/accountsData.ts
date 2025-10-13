@@ -20,25 +20,25 @@ export const Communities: Record<string, string> = {
 export const ACCOUNTS: Account[] = [
   // Instagram (4)
   {
-    id: "ig-1",
+    id: "coding_with_bugs",
     platform: "instagram",
     handle: "@coding_with_bugs",
     displayName: "@Coding_with_bugs",
   },
   {
-    id: "ig-2",
+    id: "dream_chasers",
     platform: "instagram",
     handle: "@dream_chasers",
     displayName: "@dream_chasers",
   },
   {
-    id: "ig-3",
+    id: "vallendros",
     platform: "instagram",
     handle: "@vallendros",
     displayName: "@vallendros",
   },
   {
-    id: "ig-4",
+    id: "dailyAIInsights",
     platform: "instagram",
     handle: "@dailyAIInsights",
     displayName: "@dailyAIInsights",
@@ -46,14 +46,14 @@ export const ACCOUNTS: Account[] = [
 
   // Twitter (4)
   {
-    id: "tw-1",
+    id: "maria_in_tech",
     platform: "twitter",
     handle: "@tw_one",
     displayName: "@maria_in_tech",
   },
-  { id: "tw-2", platform: "twitter", handle: "@tw_two", displayName: "TW Two" },
+
   {
-    id: "tw-3",
+    id: "me_divya",
     platform: "twitter",
     handle: "@tw_three",
     displayName: "@me_divya",

@@ -6,7 +6,7 @@ const makeDefaultAccountMap = () => {
   const map: Record<string, string | null> = {}
   for (const p of PLATFORMS) {
     const first = ACCOUNTS?.find((a) => a.platform == p)
-    map[p] = first ? first.id : null
+    map[p] = first ? first?.id : null
   }
   return map
 }

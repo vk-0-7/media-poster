@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback } from "react"
 import { Upload, CheckCircle2, Loader2 } from "lucide-react"
+import { useAccountStore } from "@/store/accountStore"
 
 interface InstagramPost {
   id: string
@@ -39,40 +40,41 @@ const InstaDashboard = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadSuccess, setUploadSuccess] = useState(false)
   const [uploadedPosts, setUploadedPosts] = useState<InstagramPost[]>([])
+  const { activeAccountByPlatform, activePlatform } = useAccountStore()
 
-  const handleFileSelect = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0]
-      if (file) {
-        setIsUploading(true)
-        setUploadSuccess(false)
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setIsUploading(true)
+      setUploadSuccess(false)
 
-        const reader = new FileReader()
-        reader.onload = async (e) => {
-          try {
-            const data = JSON.parse(e.target?.result as string)
-            setUploadedPosts(data)
+      const reader = new FileReader()
+      reader.onload = async (e) => {
+        try {
+          const data = JSON.parse(e.target?.result as string)
+          console.log(data)
+          setUploadedPosts(data)
 
-            // Simulate API call - replace with actual API endpoint
-            // const response = await fetch('/api/posts/uploadJSON', {
-            //   method: 'POST',
-            //   headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify(data)
-            // })
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}instagram/uploadJSON?account=${activeAccountByPlatform[activePlatform]}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            }
+          )
 
-            setUploadSuccess(true)
-            setTimeout(() => setUploadSuccess(false), 3000)
-          } catch (error) {
-            console.error("Error parsing JSON:", error)
-          } finally {
-            setIsUploading(false)
-          }
+          setUploadSuccess(true)
+          setTimeout(() => setUploadSuccess(false), 3000)
+        } catch (error) {
+          console.error("Error parsing JSON:", error)
+        } finally {
+          setIsUploading(false)
         }
-        reader.readAsText(file)
       }
-    },
-    []
-  )
+      reader.readAsText(file)
+    }
+  }
 
   return (
     <div className="h-full flex flex-col p-8">
@@ -109,7 +111,11 @@ const InstaDashboard = () => {
                   ? "opacity-70 cursor-not-allowed"
                   : "hover:shadow-xl hover:shadow-indigo-500/40 hover:scale-105"
               }
-              ${uploadSuccess ? "from-green-600 to-emerald-600 shadow-green-500/30" : ""}
+              ${
+                uploadSuccess
+                  ? "from-green-600 to-emerald-600 shadow-green-500/30"
+                  : ""
+              }
             `}
           >
             {isUploading ? (
