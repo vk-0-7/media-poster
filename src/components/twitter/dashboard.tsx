@@ -68,7 +68,7 @@ const TwitterDashboard = () => {
       const accountName = activeAccountId
       const response = await axios.get(`${API_BASE}twitter/tweets`, {
         params: {
-          posted: false,
+          isPosted: false,
           account: accountName,
         },
       })

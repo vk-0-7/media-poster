@@ -47,8 +47,8 @@ export default function TwitterScheduler() {
   const getAccountName = () => {
     if (!activeAccount) return "maria"
     // Map from display names to backend account names
-    if (activeAccount.displayName === "@maria_in_tech") return "maria"
-    if (activeAccount.displayName === "@me_divya") return "divya"
+    if (activeAccount.displayName === "@maria_in_tech") return "maria_in_tech"
+    if (activeAccount.displayName === "@me_divya") return "me_divya"
     return "maria" // default
   }
   console.log(getAccountName())
@@ -61,7 +61,7 @@ export default function TwitterScheduler() {
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_API_URL
-        }scheduler/start?account=${getAccountName()}`,
+        }twitter/scheduler/start?account=${getAccountName()}`,
         {
           method: "POST",
           headers: {
@@ -156,7 +156,7 @@ export default function TwitterScheduler() {
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_API_URL
-        }scheduler/status?account=${getAccountName()}`
+        }twitter/scheduler/status?account=${getAccountName()}`
       )
 
       if (!response.ok) {
